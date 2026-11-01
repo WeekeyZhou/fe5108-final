@@ -1,0 +1,65 @@
+{
+  "sample": {
+    "start": "1995-01",
+    "end": "2023-07",
+    "nobs": 343
+  },
+  "checks": {
+    "343 consecutive common months, no missing values": "PASS",
+    "Part1 CSV differences within four-place rounding": "PASS",
+    "full-precision equal-weight identity": "PASS",
+    "OLS independently matches numpy least squares": "PASS",
+    "OLS standard errors match independent covariance": "PASS",
+    "OLS p values match Student t with 338 residual df": "PASS",
+    "OLS design full rank and conventional covariance": "PASS",
+    "replication excludes intercept": "PASS",
+    "mean replication gap equals alpha": "PASS",
+    "replication gap equals alpha plus residual": "PASS",
+    "correlation squared equals OLS R squared": "PASS",
+    "MSCI_Value annualization and Sharpe": "PASS",
+    "Replication annualization and Sharpe": "PASS",
+    "Market matches Part1 performance CSV rounding": "PASS",
+    "Value matches Part1 performance CSV rounding": "PASS",
+    "MinVol matches Part1 performance CSV rounding": "PASS",
+    "EqualWeight matches Part1 performance CSV rounding": "PASS",
+    "Momentum matches Part1 performance CSV rounding": "PASS",
+    "MultiFactor matches Part1 performance CSV rounding": "PASS",
+    "active returns equal strategy minus benchmark": "PASS",
+    "annual active return equals difference of annual means": "PASS",
+    "covariance contributions sum to monthly active variance": "PASS",
+    "variance shares sum to one": "PASS",
+    "independent covariance quadratic form": "PASS",
+    "annual variance equals annual tracking error squared": "PASS",
+    "negative covariance contributions are retained": "PASS",
+    "all 13 requested and supporting CSVs exist": "PASS",
+    "all 3 figures and 2 Word documents exist": "PASS",
+    "all protected tracked files unchanged": "PASS"
+  },
+  "versions": {
+    "numpy": "2.5.4",
+    "pandas": "3.1.0",
+    "scipy": "1.18.1",
+    "statsmodels": "0.15.0",
+    "matplotlib": "3.11.2",
+    "openpyxl": "3.1.5",
+    "python-docx": "1.2.0"
+  },
+  "input_sha256": {
+    "data\\raw\\class project data (FF MSCI) (parts 1 and 5).xlsx": "15a7873363b56cc83bdd94a3d3e0daae2ab3acc00cc1a68f7c983c6ef36cc827",
+    "output\\tables\\tab_1C_monthly_returns.csv": "b01919a20e69940fa2f9a80ac5d2547b132d2640dd7ba8f921015e79e9ade9d0",
+    "output\\tables\\tab_1A_factor_spreads.csv": "40e846d4dc1078b5bee383faf8c3583ec796a3199086595a694628aeeeddc6ce",
+    "output\\tables\\tab_1C_performance.csv": "9db76152f030f2f34d31c1743a5f8d5e02375cec2b1f8d09e81bec06fbcd8de3",
+    "part1\\python_source\\question_1C.ipynb": "7ea743a8336fffed3b199d90e0208f9a734314121b7498dfe10954f25ab2de13",
+    "Read it before you do!\\class project (fall 2026) (in full).pdf": "c0b8357883e5ab1800d3de9ad852e8eddaaed0236f2f695dfc8a47529807feb5"
+  },
+  "max_rounded_csv_equal_weight_error_decimal": 7.499999999999868e-05,
+  "variance_monthly_decimal_squared": 9.558134087859056e-05,
+  "sum_contributions_monthly_decimal_squared": 9.558134087859056e-05,
+  "variance_identity_error_decimal_squared": 0.0,
+  "documents": {
+    "body_words": 627,
+    "exhibit_tables": 4,
+    "exhibit_figures": 3
+  },
+  "visual_qa": "Separate render-and-inspect workflow; see part5/documents/validation_notes.md."
+}
