@@ -1,7 +1,7 @@
 
 # ============================================================
 # FE5108 Final Project - Part 1
-# Generate Final Report and Exhibits
+# Generate Report and Exhibits
 # ============================================================
 
 from pathlib import Path
@@ -38,9 +38,9 @@ def configure_document(doc, exhibit=False):
     """Apply the agreed academic report formatting."""
 
     section = doc.sections[0]
-
     section.page_width = Inches(8.27)
     section.page_height = Inches(11.69)
+
     section.top_margin = Inches(0.85)
     section.bottom_margin = Inches(0.85)
     section.left_margin = Inches(1.0)
@@ -103,7 +103,7 @@ def format_table(table):
 
 
 def add_source_note(doc, text):
-    """Add a compact source and methodology note."""
+    """Add a compact source or methodology note."""
 
     paragraph = doc.add_paragraph(text)
     paragraph.paragraph_format.space_before = Pt(3)
@@ -126,7 +126,7 @@ def load_csv(filename, index_col=None):
 
 
 def check_figure(filename):
-    """Check that a required figure exists."""
+    """Ensure the required figure exists."""
 
     path = FIG_DIR / filename
 
@@ -136,8 +136,27 @@ def check_figure(filename):
     return path
 
 
+def create_table(doc, heading, headers, rows):
+    """Create and format a table."""
+
+    doc.add_heading(heading, level=1)
+
+    table = doc.add_table(rows=1, cols=len(headers))
+
+    for i, header in enumerate(headers):
+        table.rows[0].cells[i].text = str(header)
+
+    for values in rows:
+        cells = table.add_row().cells
+        for i, value in enumerate(values):
+            cells[i].text = str(value)
+
+    format_table(table)
+    return table
+
+
 # ============================================================
-# 3. Generate Part 1 Report
+# 3. Generate the Part 1 Report
 # ============================================================
 
 report = Document()
@@ -147,7 +166,7 @@ report.add_heading("Part 1 Factor Investing", level=0)
 
 
 def add_section(heading, paragraphs):
-    """Add a report section with its analysis."""
+    """Add a report section with its academic analysis."""
 
     report.add_heading(heading, level=1)
 
@@ -156,247 +175,218 @@ def add_section(heading, paragraphs):
 
 
 # ============================================================
-# Question 1A: Factor Premiums and Factor Decay
+# 1A Factor Premiums and Factor Decay
 # ============================================================
 
 add_section(
     "1A Factor Premiums and Factor Decay",
     [
         (
-            "The Fama-French factors show different patterns before and "
-            "after 1993. The market premium remains statistically "
-            "significant in both periods, while monthly SMB and HML "
-            "premiums fall from 0.240% to 0.100% and from 0.435% "
-            "to 0.146%, respectively. Neither remains significant "
-            "after 1993 (Table 1.1)."
+            "The Fama-French factors show different patterns before "
+            "and after 1993. The market premium remains statistically "
+            "significant in both periods, while the average monthly "
+            "SMB premium declines from 0.240% to 0.100% and HML "
+            "from 0.435% to 0.146%. Neither SMB nor HML remains "
+            "significant after 1993 (Table 1.1)."
         ),
         (
-            "Could greater investor attention explain the decline? "
-            "As factor strategies become more widely adopted, demand "
-            "for stocks with attractive characteristics may increase. "
-            "For example, stronger demand for undervalued stocks may "
-            "raise their prices and reduce future expected returns. "
-            "However, the results cannot confirm this mechanism or "
-            "establish a significant change in mean premiums "
-            "between the two periods."
+            "Greater investor attention may partly explain this "
+            "decline. As factor strategies become more widely "
+            "adopted, increased demand for stocks with certain "
+            "characteristics could raise prices and reduce "
+            "subsequent returns. For example, demand for "
+            "undervalued stocks may gradually reduce the value "
+            "premium. However, the analysis neither tests this "
+            "mechanism nor establishes whether the changes in "
+            "average premiums are statistically significant."
         ),
         (
             "The weaker post-1993 evidence makes SMB and HML less "
-            "convincing as standalone investment strategies than "
-            "their earlier performance suggested. The market "
-            "premium, by contrast, remains statistically significant. "
-            "Value-weighted momentum and low-beta decile spreads "
-            "are also constructed for Sections 1D and 1E."
-        )
-    ]
+            "convincing as standalone strategies, unlike the "
+            "persistently significant market premium. This "
+            "highlights the importance of evaluating factors "
+            "across different periods. Value-weighted momentum "
+            "and low-beta decile spreads are also constructed "
+            "for Sections 1D and 1E."
+        ),
+    ],
 )
 
 
 # ============================================================
-# Question 1B: Factor Index Construction in Practice
+# 1B Factor Index Construction in Practice
 # ============================================================
 
 add_section(
     "1B Factor Index Construction in Practice",
     [
         (
-            "Academic momentum strategies focus on past winners "
-            "and losers. In practice, however, liquidity, trading "
-            "costs, and concentration also matter. The MSCI USA "
-            "Momentum Index illustrates these trade-offs. Its "
-            "universe covers the large- and mid-cap US stocks "
-            "in the MSCI USA parent index."
+            "Unlike academic long-short momentum strategies, "
+            "investable indexes must consider liquidity, trading "
+            "costs, and concentration. The MSCI USA Momentum Index "
+            "draws from large- and mid-cap US stocks in the MSCI "
+            "USA parent index."
         ),
         (
-            "Under the December 2013 methodology, the index uses "
-            "6- and 12-month momentum signals, excluding the most "
-            "recent month. Each signal is adjusted for local "
-            "risk-free rates and scaled by three-year annualized "
-            "volatility based on weekly returns. The signals are "
-            "standardized, combined equally, and standardized "
-            "again. The resulting z-score is winsorized at +/-3 "
-            "and converted into a positive Momentum Score. "
-            "Stocks with the highest positive unwinsorized "
-            "z-scores are selected, subject to a target "
-            "constituent count."
+            "Under its December 2013 methodology, the index "
+            "combines 6- and 12-month momentum signals, excluding "
+            "the latest month. Each signal is adjusted for local "
+            "risk-free rates, scaled by three-year annualized "
+            "weekly-return volatility, and standardized. The "
+            "signals are equally combined and standardized again. "
+            "The final z-score is winsorized at ±3 and converted "
+            "into a positive Momentum Score. Stocks with the "
+            "highest positive unwinsorized z-scores are selected, "
+            "subject to a target constituent count."
         ),
         (
-            "Weights depend on both Momentum Scores and "
-            "parent-index market capitalization. Consider two "
-            "stocks with similar momentum signals: the larger "
-            "stock may receive more weight. This can reduce "
-            "trading impact by favoring generally more liquid "
-            "stocks and improve investment capacity. However, "
-            "smaller stocks with stronger momentum may receive "
-            "relatively low weights, weakening factor exposure."
+            "Weights reflect both Momentum Scores and parent-index "
+            "market capitalization. Larger companies may receive "
+            "higher weights despite similar momentum signals, "
+            "improving investment capacity and reducing trading "
+            "impact through generally greater liquidity. However, "
+            "smaller stocks with strong momentum may be "
+            "underweighted, weakening factor exposure."
         ),
         (
-            "The index is normally rebalanced in May and "
-            "November, with buffer rules to limit turnover. "
-            "An additional rebalance is triggered when the "
-            "monthly relative increase in market volatility "
-            "exceeds the historical 95th percentile of changes "
-            "for the MSCI World reference index. Only the "
-            "6-month momentum signal is then used, aiming to "
-            "mitigate drawdowns during volatility spikes. "
-            "A 5% issuer weight cap limits concentration. "
-            "The resulting index therefore differs from "
-            "an academic long-short momentum factor."
+            "The index normally rebalances in May and November, "
+            "using buffers to limit turnover. An additional "
+            "rebalance is triggered when the monthly relative "
+            "rise in volatility exceeds the historical 95th "
+            "percentile of changes for the MSCI World reference "
+            "index. It uses only 6-month momentum to respond "
+            "faster and potentially limit losses. A 5% issuer "
+            "cap further controls concentration."
         ),
         (
             "Source: MSCI Momentum Indexes Methodology "
             "(December 2013), Sections 2-3 and "
             "Appendices II-III."
-        )
-    ]
+        ),
+    ],
 )
 
 
 # ============================================================
-# Question 1C: Benefits of Factor Diversification
+# 1C Benefits of Factor Diversification
 # ============================================================
 
 add_section(
     "1C Benefits of Factor Diversification",
     [
         (
-            "Among the four MSCI factor indexes, Momentum "
-            "delivers the highest annualized return (13.38%) "
-            "and Sharpe ratio (0.686). Value performs worst, "
-            "with the lowest return (9.87%) and Sharpe ratio "
-            "(0.505). Why not simply invest in Momentum? "
-            "Its position as the strongest performer is "
-            "only known after observing the full sample."
+            "Momentum has the highest annualized return (13.38%) "
+            "and Sharpe ratio (0.686), while Value performs worst "
+            "(9.87%; Sharpe 0.505). However, selecting Momentum "
+            "based on its historical ranking involves hindsight "
+            "bias."
         ),
         (
-            "An equally weighted portfolio of Value, Minimum "
-            "Volatility, Equal Weight, and Momentum provides "
-            "an alternative, with monthly rebalancing. "
-            "Compared with MSCI USA, its annualized return "
-            "increases slightly from 11.22% to 11.37%, "
-            "while volatility falls from 15.44% to 14.40%. "
-            "This improves the Sharpe ratio from 0.587 "
-            "to 0.639 (Table 1.2)."
+            "An equally weighted, monthly rebalanced portfolio "
+            "of Value, Minimum Volatility, Equal Weight, and "
+            "Momentum improves the Sharpe ratio from 0.587 for "
+            "MSCI USA to 0.639. Its annualized return rises "
+            "slightly from 11.22% to 11.37%, while volatility "
+            "falls from 15.44% to 14.40% (Table 1.2)."
         ),
         (
-            "The portfolio still trails Momentum and Minimum "
-            "Volatility on a risk-adjusted basis. Yet it "
-            "avoids relying entirely on a single factor. "
-            "Given the weaker premiums observed in Section "
-            "1A, diversification may be preferable to "
-            "selecting a strategy solely by its historical "
-            "ranking. The historical results favor "
-            "diversification relative to the market "
-            "benchmark, although future performance may "
-            "differ (Figures 1.1-1.2)."
-        )
-    ]
+            "Although its Sharpe ratio remains below Momentum "
+            "and Minimum Volatility, the portfolio reduces "
+            "dependence on any single factor. The results "
+            "suggest diversification benefits relative to the "
+            "market benchmark, without guaranteeing future "
+            "outperformance (Figures 1.1-1.2)."
+        ),
+    ],
 )
 
 
 # ============================================================
-# Question 1D: Sensitivity to Factor Portfolio Construction
+# 1D Sensitivity to Factor Portfolio Construction
 # ============================================================
 
 add_section(
     "1D Sensitivity to Factor Portfolio Construction",
     [
         (
-            "The diversification results raise another "
-            "question: do differently named factor indexes "
-            "provide different sources of return? Monthly "
-            "MSCI factor spreads relative to MSCI USA are "
-            "compared with value-weighted academic factor "
-            "spreads over January 1995-July 2023."
+            "To assess construction differences, monthly MSCI "
+            "factor spreads relative to MSCI USA are correlated "
+            "with value-weighted academic factor spreads over "
+            "January 1995-July 2023."
         ),
         (
-            "The correlations generally reflect the intended "
-            "strategies. Minimum Volatility and low-beta "
-            "have a correlation of 0.815, while Value and "
-            "HML reach 0.728. MSCI Momentum is also related "
-            "to the academic momentum spread (0.642). "
-            "These relationships remain visible despite "
-            "differences in portfolio construction "
-            "(Table 1.3)."
+            "Minimum Volatility correlates strongly with low-beta "
+            "(0.815), as does MSCI Value with HML (0.728). MSCI "
+            "Momentum also correlates positively with academic "
+            "momentum (0.642). These results suggest recognizable "
+            "factor characteristics despite differences in stock "
+            "selection and weighting (Table 1.3)."
         ),
         (
-            "Equal Weight is less straightforward. Its "
-            "correlation with SMB is only 0.322, lower "
-            "than with HML (0.431). Although equal "
-            "weighting gives smaller companies greater "
-            "influence, it does not select stocks directly "
-            "by size. Other characteristics may therefore "
-            "contribute to its returns."
+            "Equal Weight has a weaker correlation with SMB "
+            "(0.322) than with HML (0.431). Although equal "
+            "weighting increases smaller stocks' influence, "
+            "it does not explicitly select by size, so other "
+            "characteristics may affect returns."
         ),
         (
-            "This matters for the multi-factor portfolio "
-            "in Section 1C. Different index labels do not "
-            "guarantee independent return sources. The "
-            "correlations suggest possible overlap, "
-            "although factor regressions would be needed "
-            "to measure exposures more directly."
-        )
-    ]
+            "Consequently, the four indexes in Section 1C "
+            "may have overlapping factor exposures despite "
+            "their different labels. Factor regressions would "
+            "be needed to measure these exposures more "
+            "directly."
+        ),
+    ],
 )
 
 
 # ============================================================
-# Question 1E: Regime Sensitivity of Factor Premia
+# 1E Regime Sensitivity of Factor Premia
 # ============================================================
 
 add_section(
     "1E Regime Sensitivity of Factor Premia",
     [
         (
-            "Momentum's historical performance may conceal "
-            "periods of substantial weakness. Daniel and "
-            "Moskowitz (2016) document momentum crashes "
-            "during sharp market rebounds, when previous "
-            "losers can recover faster than previous "
-            "winners. The 2009 rebound is one example, "
-            "although market reversals are not directly "
-            "tested here."
+            "Daniel and Moskowitz (2016) document momentum "
+            "crashes during sharp market rebounds, including "
+            "2009, when previous losers recover faster than "
+            "winners. This analysis instead examines the "
+            "relationship between momentum returns and recent "
+            "market volatility."
         ),
         (
-            "Momentum earns an average monthly return "
-            "of 1.86% in medium-volatility periods but "
-            "-1.03% in high-volatility periods. The "
-            "low-volatility group earns only 1.04%, "
-            "so the pattern is not strictly monotonic "
-            "(Table 1.4). The high-minus-low difference "
-            "is not statistically significant under "
-            "the Welch test (p = 0.103)."
+            "Momentum earns its highest average monthly return "
+            "in medium-volatility periods (1.86%), compared "
+            "with 1.04% in low-volatility and -1.03% in "
+            "high-volatility periods (Table 1.4). The pattern "
+            "is not strictly monotonic, and the high-minus-low "
+            "difference is not statistically significant "
+            "under the Welch test (p = 0.103)."
         ),
         (
-            "Using 332 months from December 1995 to July "
-            "2023, a regression on trailing 12-month "
-            "annualized market volatility produces a "
-            "negative coefficient (-0.267). It remains "
-            "significant using Newey-West HAC standard "
-            "errors with 12 lags (p = 0.022), although "
-            "R-squared is only 3.15%. The regression "
-            "suggests a negative linear association, "
-            "while the regime comparison is less "
-            "conclusive."
+            "A regression using 332 monthly observations from "
+            "December 1995 to July 2023 finds a negative "
+            "volatility coefficient (-0.267), significant with "
+            "Newey-West HAC(12) standard errors (p = 0.022). "
+            "However, the R-squared is only 3.15%, indicating "
+            "limited explanatory power."
         ),
         (
-            "Higher volatility may therefore warrant "
-            "closer monitoring of momentum risk. However, "
-            "volatility alone explains little of the "
-            "variation in returns. Unlike Daniel and "
-            "Moskowitz (2016), this analysis does not "
-            "directly identify market reversals or "
-            "momentum crashes. Since the volatility "
-            "measure includes the current month, "
-            "predictive value remains untested "
-            "(Figure 1.3)."
+            "Overall, the regression suggests a negative "
+            "association, while the regime comparison is less "
+            "conclusive. Volatility alone cannot reliably "
+            "indicate momentum performance. The analysis does "
+            "not identify momentum crashes, and because the "
+            "volatility measure includes the current month, "
+            "predictive ability remains untested (Figure 1.3)."
         ),
         (
             "Reference: Daniel, K., and Moskowitz, T. J. "
-            "(2016). Momentum Crashes. Journal of "
-            "Financial Economics, 122(2), 221-247."
-        )
-    ]
+            "(2016). Momentum Crashes. Journal of Financial "
+            "Economics, 122(2), 221-247."
+        ),
+    ],
 )
 
 report.save(REPORT_PATH)
@@ -419,8 +409,11 @@ exhibits.add_heading("Part 1 Selected Exhibits", level=0)
 results = load_csv("tab_1A_factor_premiums.csv")
 
 required_columns = {
-    "Period", "Factor", "N",
-    "Mean Monthly Return (%)", "t-stat"
+    "Period",
+    "Factor",
+    "N",
+    "Mean Monthly Return (%)",
+    "t-stat",
 }
 
 if not required_columns.issubset(results.columns):
@@ -429,32 +422,19 @@ if not required_columns.issubset(results.columns):
 if len(results) != 6:
     raise ValueError("Expected six factor-period observations.")
 
-exhibits.add_heading(
-    "Table 1.1 Factor premiums before and after publication",
-    level=1
-)
-
-table_1A = exhibits.add_table(rows=1, cols=5)
-
-headers = [
-    "Factor", "Period", "N",
-    "Mean monthly return", "t-stat"
-]
-
-for i, header in enumerate(headers):
-    table_1A.rows[0].cells[i].text = header
-
 period_names = {
     "1A_pre": "1927–1992",
-    "1A_post": "1993–Jul 2023"
+    "1A_post": "1993–Jul 2023",
 }
+
+rows_1A = []
 
 for period in ["1A_pre", "1A_post"]:
     for factor in ["Mkt-RF", "SMB", "HML"]:
 
         selected = results.loc[
-            (results["Period"] == period) &
-            (results["Factor"] == factor)
+            (results["Period"] == period)
+            & (results["Factor"] == factor)
         ]
 
         if len(selected) != 1:
@@ -466,20 +446,26 @@ for period in ["1A_pre", "1A_post"]:
         t_stat = record["t-stat"]
         significance = "*" if abs(t_stat) > 1.96 else ""
 
-        values = [
+        rows_1A.append([
             factor,
             period_names[period],
             str(int(record["N"])),
             f'{record["Mean Monthly Return (%)"]:.3f}%',
-            f"{t_stat:.3f}{significance}"
-        ]
+            f"{t_stat:.3f}{significance}",
+        ])
 
-        cells = table_1A.add_row().cells
-
-        for i, value in enumerate(values):
-            cells[i].text = value
-
-format_table(table_1A)
+table_1A = create_table(
+    exhibits,
+    "Table 1.1 Factor premiums before and after publication",
+    [
+        "Factor",
+        "Period",
+        "N",
+        "Mean monthly return",
+        "t-stat",
+    ],
+    rows_1A,
+)
 
 add_source_note(
     exhibits,
@@ -501,23 +487,6 @@ performance_1C = load_csv("tab_1C_performance.csv")
 fig_return = check_figure("fig_1C_return.png")
 fig_sharpe = check_figure("fig_1C_sharpe.png")
 
-exhibits.add_heading(
-    "Table 1.2 Annualized performance of MSCI factor indexes",
-    level=1
-)
-
-table_1C = exhibits.add_table(rows=1, cols=4)
-
-headers_1C = [
-    "Strategy",
-    "Annualized return",
-    "Annualized volatility",
-    "Sharpe ratio"
-]
-
-for i, header in enumerate(headers_1C):
-    table_1C.rows[0].cells[i].text = header
-
 strategy_names = {
     "Market": "MSCI USA",
     "Value": "Value",
@@ -525,7 +494,7 @@ strategy_names = {
     "EqualWeight": "Equal weight",
     "Momentum": "Momentum",
     "MultiFactor": "Multi-factor",
-    "RiskFree": "Risk-free"
+    "RiskFree": "Risk-free",
 }
 
 strategy_order = [
@@ -535,11 +504,12 @@ strategy_order = [
     "EqualWeight",
     "Momentum",
     "MultiFactor",
-    "RiskFree"
+    "RiskFree",
 ]
 
-for strategy in strategy_order:
+rows_1C = []
 
+for strategy in strategy_order:
     selected = performance_1C.loc[
         performance_1C["Strategy"] == strategy
     ]
@@ -550,19 +520,24 @@ for strategy in strategy_order:
     record = selected.iloc[0]
     sharpe = record["Sharpe Ratio"]
 
-    values = [
+    rows_1C.append([
         strategy_names[strategy],
         f'{record["Annualized Return (%)"]:.2f}%',
         f'{record["Annualized Volatility (%)"]:.2f}%',
-        f"{sharpe:.3f}" if pd.notna(sharpe) else "—"
-    ]
+        f"{sharpe:.3f}" if pd.notna(sharpe) else "—",
+    ])
 
-    cells = table_1C.add_row().cells
-
-    for i, value in enumerate(values):
-        cells[i].text = value
-
-format_table(table_1C)
+table_1C = create_table(
+    exhibits,
+    "Table 1.2 Annualized performance of MSCI factor indexes",
+    [
+        "Strategy",
+        "Annualized return",
+        "Annualized volatility",
+        "Sharpe ratio",
+    ],
+    rows_1C,
+)
 
 add_source_note(
     exhibits,
@@ -584,22 +559,22 @@ add_source_note(
 
 exhibits.add_heading(
     "Figure 1.1 Annualized arithmetic returns by strategy",
-    level=1
+    level=1,
 )
 
 exhibits.add_picture(
     str(fig_return),
-    width=Inches(6.0)
+    width=Inches(6.0),
 )
 
 exhibits.add_heading(
     "Figure 1.2 Risk-adjusted performance by strategy",
-    level=1
+    level=1,
 )
 
 exhibits.add_picture(
     str(fig_sharpe),
-    width=Inches(6.0)
+    width=Inches(6.0),
 )
 
 
@@ -609,15 +584,21 @@ exhibits.add_picture(
 
 corr_1D = load_csv(
     "tab_1D_correlations.csv",
-    index_col=0
+    index_col=0,
 )
 
 expected_rows = [
-    "Value", "MinVol", "EqualWeight", "Momentum"
+    "Value",
+    "MinVol",
+    "EqualWeight",
+    "Momentum",
 ]
 
 expected_cols = [
-    "HML", "SMB", "Momentum", "LowBeta"
+    "HML",
+    "SMB",
+    "Momentum",
+    "LowBeta",
 ]
 
 corr_1D = corr_1D.loc[expected_rows, expected_cols]
@@ -625,58 +606,48 @@ corr_1D = corr_1D.loc[expected_rows, expected_cols]
 assert corr_1D.shape == (4, 4)
 assert corr_1D.notna().all().all()
 
-exhibits.add_heading(
-    "Table 1.3 Correlation between MSCI and academic factor spreads",
-    level=1
-)
-
-table_1D = exhibits.add_table(rows=1, cols=5)
-
-headers_1D = [
-    "MSCI spread",
-    "HML",
-    "SMB",
-    "Momentum",
-    "Low-beta"
-]
-
-for i, header in enumerate(headers_1D):
-    table_1D.rows[0].cells[i].text = header
-
 row_names = {
     "Value": "Value",
     "MinVol": "Minimum volatility",
     "EqualWeight": "Equal weight",
-    "Momentum": "Momentum"
+    "Momentum": "Momentum",
 }
 
-for strategy in expected_rows:
+rows_1D = []
 
+for strategy in expected_rows:
     values = [
         row_names[strategy],
         *[
             f"{corr_1D.loc[strategy, col]:.3f}"
             for col in expected_cols
-        ]
+        ],
     ]
+    rows_1D.append(values)
 
-    cells = table_1D.add_row().cells
+table_1D = create_table(
+    exhibits,
+    "Table 1.3 Correlation between MSCI and academic factor spreads",
+    [
+        "MSCI spread",
+        "HML",
+        "SMB",
+        "Momentum",
+        "Low-beta",
+    ],
+    rows_1D,
+)
 
-    for i, value in enumerate(values):
-        cells[i].text = value
-
-format_table(table_1D)
-
-# Highlight the intended factor pairs in green.
+# Highlight corresponding factor pairs in green.
 for row_num, col_num in [
     (1, 1),
     (2, 4),
     (3, 2),
-    (4, 3)
+    (4, 3),
 ]:
     shade_cell(
         table_1D.cell(row_num, col_num),
-        fill="D9EEE8"
+        fill="D9EEE8",
     )
 
 add_source_note(
@@ -698,61 +669,45 @@ add_source_note(
 
 regime_1E = load_csv(
     "tab_1E_regime_summary.csv",
-    index_col=0
+    index_col=0,
 )
 
 regression_1E = load_csv(
     "tab_1E_regression.csv",
-    index_col=0
+    index_col=0,
 )
 
 fig_regime = check_figure("fig_1E_regime_momentum.png")
 
-expected_regimes = [
-    "Low",
-    "Medium",
-    "High"
-]
-
+expected_regimes = ["Low", "Medium", "High"]
 regime_1E = regime_1E.loc[expected_regimes]
 
 assert regime_1E["N"].sum() == 332
 assert regime_1E.notna().all().all()
 
-exhibits.add_heading(
-    "Table 1.4 Momentum performance by market volatility regime",
-    level=1
-)
-
-table_1E = exhibits.add_table(rows=1, cols=4)
-
-headers_1E = [
-    "Regime",
-    "Months",
-    "Mean market vol.",
-    "Mean momentum"
-]
-
-for i, header in enumerate(headers_1E):
-    table_1E.rows[0].cells[i].text = header
+rows_1E = []
 
 for regime in expected_regimes:
-
     record = regime_1E.loc[regime]
 
-    values = [
+    rows_1E.append([
         regime,
         str(int(record["N"])),
         f'{record["Mean Market Vol (%)"]:.2f}%',
-        f'{record["Mean Momentum (%)"]:+.2f}%'
-    ]
+        f'{record["Mean Momentum (%)"]:+.2f}%',
+    ])
 
-    cells = table_1E.add_row().cells
-
-    for i, value in enumerate(values):
-        cells[i].text = value
-
-format_table(table_1E)
+table_1E = create_table(
+    exhibits,
+    "Table 1.4 Momentum performance by market volatility regime",
+    [
+        "Regime",
+        "Months",
+        "Mean market vol.",
+        "Mean momentum",
+    ],
+    rows_1E,
+)
 
 add_source_note(
     exhibits,
@@ -780,17 +735,17 @@ exhibits.add_paragraph(
 
 
 # ============================================================
-# Figure 1.3: Momentum Returns by Volatility Regime
+# Figure 1.3: Momentum by Volatility Regime
 # ============================================================
 
 exhibits.add_heading(
     "Figure 1.3 Momentum returns across volatility regimes",
-    level=1
+    level=1,
 )
 
 exhibits.add_picture(
     str(fig_regime),
-    width=Inches(6.0)
+    width=Inches(6.0),
 )
 
 exhibits.save(EXHIBIT_PATH)
@@ -808,35 +763,29 @@ report_text = "\n".join(
 )
 
 checks = {
-    "1A investment conclusion":
-        "less convincing as standalone" in report_text,
+    "1A factor analysis":
+        "Greater investor attention" in report_text,
 
-    "1B standardization":
+    "1B momentum methodology":
         "standardized again" in report_text,
 
     "1B volatility trigger":
         "95th percentile" in report_text,
 
-    "1B MSCI World reference":
-        "MSCI World reference index" in report_text,
-
-    "1B investment capacity":
+    "1B implementation benefits":
         "investment capacity" in report_text,
 
-    "1C best and worst factors":
-        "lowest return (9.87%)" in report_text,
+    "1C diversification":
+        "hindsight bias" in report_text,
 
-    "1C final interpretation":
-        "future performance may differ" in report_text,
-
-    "1D correlations":
+    "1D factor correlations":
         "0.815" in report_text,
 
-    "1E statistical analysis":
-        "Newey-West" in report_text,
+    "1E Welch test":
+        "p = 0.103" in report_text,
 
-    "1E literature reference":
-        "Daniel and Moskowitz" in report_text,
+    "1E HAC regression":
+        "Newey-West" in report_text,
 
     "Four exhibit tables":
         len(exhibit_check.tables) == 4,
@@ -860,4 +809,4 @@ print("\nAll final checks passed.")
 print("\nGenerated documents:")
 print(REPORT_PATH)
 print(EXHIBIT_PATH)
-print("\nNote: Check the final page count in Microsoft Word.")
+print("\nCheck that the final report fits within two pages.")
