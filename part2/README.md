@@ -50,7 +50,3 @@ Question 2A generates the cleaned-return cache; the flag diagnostic generates it
 **Rerunning scripts may overwrite their generated outputs**, including the final Word documents. Preserve any manual document edits separately or reproduce the work in a separate checkout.
 
 The main 2B-2D analysis uses formation dates December 1998-November 2018 and investment returns January 1999-December 2018. It retains the provisional P/B flags and uses monthly 1st/99th-percentile winsorized stock returns. Original-return and flag-exclusion results remain sensitivity analyses. Returns are decimals internally; arithmetic annualized returns and geometric CAGR are reported separately.
-
-## Outstanding team check
-
-**Member 1's independent MSCI USA and Fama-French HML reconciliation remains pending.** Internal reference checks against the professor's workbook do not establish agreement with Member 1's separate calculations. The pending check does not prevent sharing this Part 2 package with the team.
