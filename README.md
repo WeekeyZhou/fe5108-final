@@ -1,134 +1,103 @@
 # FE5108 Portfolio Theory and Investments — Class Project (Fall 2026)
 
-Practitioner segment class project, NUS RMI.
+Practitioner segment class project, NUS Risk Management Institute. Instructor: Sanne de Boer.
 
-- **Deadline:** Sunday, **8 Nov 2026**, submitted by email (PDF or Word; code as attachment or appendix)
-- **Length:** max **8 pages** of text, excluding exhibits
-- **Cover page:** state each member's contribution
-- Assignment PDF and team plan: see [`Read it before you do!/`](Read%20it%20before%20you%20do!/)
+**Final submission:** [`report/FE5108_Group_Report.pdf`](report/FE5108_Group_Report.pdf) (Word version: [`report/FE5108_Group_Report.docx`](report/FE5108_Group_Report.docx))
 
----
+| Pages | Content |
+|---|---|
+| 1 | Cover page with team members and contributions |
+| 2–9 | Main text, Parts 1–5 (within the 8-page limit; Arial 11 pt) |
+| 10–31 | Appendix of exhibits, numbered by part (e.g. Table 3.1, Figure 4.2); each exhibit states its data source, period and universe |
 
-## Team & division of work
-
-Members are numbered **1–5** (Member 1 owns Part 1, etc.) to avoid confusion with question numbers like 1A, 2B.
-Each member owns the **data loading, code, exhibits and write-up** of their own part.
-
-| Member | Part | Points | Page budget | Data used |
-|---|---|---|---|---|
-| 1 ____ | Part 1 — Factor investing (1A–1E) | 22 | ~1.75 | FF/MSCI workbook (all 4 sheets) |
-| 2 ____ | Part 2 — Security-level data (2A–2D) | 20 | ~1.5 | Part 2 CSV; HML + MSCI USA from FF/MSCI workbook |
-| 3 ____ | Part 3 — Portfolio construction (3A–3E) | 21 | ~1.75 | Part 3 workbook; MSCI USA from FF/MSCI workbook |
-| 4 ____ | Part 4 — to be released | ~18 | ~1.5 | TBD |
-| 5 ____ | Part 5 — to be released | ~19 | ~1.5 | TBD (FF/MSCI workbook is labelled "parts 1 and 5") |
-
-There are **no data hand-offs** between members: everyone reads what they need directly from `data/raw/`.
+The code, data and all generated tables and figures behind the report are in this repository.
 
 ---
 
-## Directory structure
+## Team and contributions
+
+| Member | Part | Contribution |
+|---|---|---|
+| Zhang Jiaxin | Part 1 — Factor investing (22 pts) | Fama-French factor premia and t-statistics before and after 1993; MSCI Momentum index methodology; multi-factor index and Sharpe ratios; MSCI vs Fama-French factor-spread correlations; momentum across market-volatility regimes |
+| Sato Yuki | Part 2 — Security-level data (20 pts) | Data cleaning and validation; market proxy vs MSCI USA; three Value portfolio constructions; tracking error and correlation with HML |
+| Zhou Mo (Weekey) | Part 3 — Portfolio construction (21 pts) | Minimum-variance and inverse-volatility portfolios; in-sample and out-of-sample volatility; re-optimization; crisis performance. Also set up this repository and the shared code conventions, allocated the work and integrated the final report |
+| Zhang Yin | Part 4 — Product innovation (11 pts) | NVDL vs NVDA risk metrics, regression and performance drag, monthly and two-day compounding, trader vs investor choice |
+| Wu Shuhan | Part 5 — Portfolio analytics (26 pts) | MSCI vs Fama-French value definitions; factor regression and alpha; replicating portfolio; active return, tracking error and information ratio; risk decomposition |
+
+Each member owns the data loading, code, exhibits and write-up of their part.
+
+---
+
+## Repository structure
 
 ```
 Final Project/
-├── README.md                  This file
-├── .gitignore
-├── requirements.txt           Python packages used
-│
-├── Read it before you do!/    Assignment PDF and team plan
-│
-├── data/
-│   └── raw/                   Data provided by the professor — DO NOT EDIT
-│       ├── class project data (FF MSCI) (parts 1 and 5).xlsx
-│       ├── class project data (part 2 - factor portfolio construction).csv
-│       └── class project data (part 3 - pf construction).xlsx
-│
+├── README.md                    This file
+├── requirements.txt             Python packages for the whole project
+├── Read it before you do!/      Assignment PDF and team plan
+├── data/raw/                    Data provided by the instructor (not modified)
 ├── src/
-│   ├── config.py              Paths, file names, analysis periods, chart style
-│   └── utils.py               Shared helpers: units, dates, annualization, charts
-│
-├── part1/ … part5/            One folder per member: notebooks / scripts
-│
+│   ├── config.py                Shared paths, analysis periods and chart style
+│   └── utils.py                 Shared helpers: units, dates, annualization, charts, tables
+├── part1/ … part5/              One folder per part
+│   ├── README.md                Part-specific notes
+│   ├── python_source/           Notebooks / scripts and the part's Word builder
+│   └── documents/               PartN_report.docx (text) and PartN_exhibits.docx (exhibits)
 ├── output/
-│   ├── figures/               e.g. fig_1C_sharpe.png
-│   └── tables/                e.g. tab_3A_weights.csv
-│
-└── report/                    Write-up drafts and final report
+│   ├── figures/                 All figures (PNG), named by question, e.g. fig_3C_oos_vol.png
+│   └── tables/                  All numerical tables (CSV), e.g. tab_3C_oos_vol.csv
+└── report/
+    ├── build_report.py          Builds the integrated group report from the part documents
+    ├── FE5108_Group_Report.docx
+    └── FE5108_Group_Report.pdf
 ```
 
----
+## Data
 
-## Data files
-
-| File | Contents | Used by |
+| File (`data/raw/`) | Contents | Used in |
 |---|---|---|
-| `class project data (FF MSCI) (parts 1 and 5).xlsx` | 4 sheets: FF portfolios sorted on beta; FF portfolios sorted on prior return (momentum); FF 3-factor returns; MSCI factor total-return index levels (5 indexes) | Members 1, 2, 3 (and 5) |
-| `class project data (part 2 - factor portfolio construction).csv` | Anonymized stock-level data: `stock_id, date, Pb, Bv, R1M_Usd, Vol3Y_Usd, Mkt_Cap_3M_Usd`; Nov 1998 – Mar 2019 | Member 2 |
-| `class project data (part 3 - pf construction).xlsx` | FF 49 industry portfolios, value-weighted monthly returns, Jan 1995 – Jul 2023 | Member 3 |
+| `class project data (FF MSCI) (parts 1 and 5).xlsx` | Fama-French portfolios sorted on beta and on prior return, Fama-French 3 factors, MSCI USA / Value / Minimum Volatility / Equal Weighted / Momentum index levels (gross, USD) | Parts 1, 3E, 5 |
+| `class project data (part 2 - factor portfolio construction).csv` | Anonymized stock-level data from *Machine Learning for Factor Investing* (Coqueret and Guida), Nov 1998 – Mar 2019 | Part 2 |
+| `class project data (part 3 - pf construction).xlsx` | Fama-French 49 industry portfolios, value-weighted monthly total returns, Jan 1995 – Jul 2023 | Part 3 |
+| `class project data (part 4 - product innovation).xlsx` | Daily total returns of NVDA and NVDL, Feb – Aug 2024 | Part 4 |
 
-### Things to watch out for when loading
-
-- **FF beta portfolios:** in the header, the 8 columns between `Lo 10` and `Hi 10` were converted by Excel into dates (`2023-12-02` … `2023-12-09`). They are actually deciles 2–9. Data start in Jul 1963.
-- **FF momentum & beta sheets:** several blocks are stacked in one sheet (VW monthly, EW monthly, annual, number of firms, …). Use only the **"Value Weighted Returns -- Monthly"** block.
-- **FF 3 factors:** annual factors follow below the monthly block — don't read them in. Units are **percent** (divide by 100).
-- **MSCI:** these are **index levels**, not returns — compute month-end to month-end % change. Numbers contain thousands separators (e.g. `1,182.011`). The series starts on 30 Dec 1994, so the first monthly return is Jan 1995.
-- **Stock-level data:** percentile fields are on a **0–1** scale (the assignment says 0–100; same meaning). `R1M_Usd` is a **decimal, one-month-forward** return: the row dated 31 Dec 1998 is the return for Jan 1999. Shift by one month before comparing with MSCI/FF.
-- **49 industries:** no `-99.99` missing values in Jan 1995 – Jul 2023. Units are percent.
-
-### Cross-check
-
-MSCI USA returns are computed separately by Members 1, 2 and 3, and HML is read separately by Members 1 and 2.
-After loading, compare a few values in the group chat (e.g. MSCI USA and HML for Jan 1995) so the report stays consistent.
-Members 1 and 2 should also align the wording on how HML is constructed (1A vs. 2C/2D).
+Cross-check: MSCI USA return for January 1995 is 2.781% in every part that uses it (Parts 1, 2, 3 and 5).
 
 ---
 
-## Team conventions
+## Reproducing the results
 
-All conventions are implemented in `src/config.py` and `src/utils.py` — use them instead of writing your own.
-
-```python
-# at the top of every notebook in partN/
-import sys; sys.path.append("..")
-from src import config, utils
-config.apply_style()
-```
-
-- **Units:** all returns in **decimals** (0.01 = 1%) inside code; convert to % only when displaying.
-  FF percent data → `utils.pct_to_decimal()`; MSCI index levels → `utils.levels_to_returns()`.
-- **Dates:** monthly `Period` index; each row = the return earned *in* that month → `utils.to_monthly_index()`.
-  Analysis periods from the assignment are in `config.PERIODS` → `utils.select_period(df, "1C")`.
-- **Annualization:**
-  - Volatility is always `std(monthly) × √12` → `utils.annualized_volatility()`.
-  - Annualized return must state its method: `utils.annualized_return(r, method="arithmetic")` (mean × 12) or `method="geometric"` (compound growth). The assignment asks us to think about which mean is appropriate (1A, 2C), so choose per question and say so in the report.
-  - Sharpe ratio follows footnote 2 of the assignment → `utils.sharpe_ratio(r, rf, method=...)`.
-  - Also available: `tracking_error()`, `t_stat_mean()`, `cumulative_value()`.
-- **Exhibits:**
-  - Create figures at their **printed size** with `utils.new_fig("full")` (6.0 × 2.8 in) or `utils.new_fig("half")` (3.0 × 2.3 in, two side by side). Don't resize them in Word, so fonts stay readable and don't overlap.
-  - Small fonts: 8 pt labels, 7 pt ticks/legend, 9 pt title, 6.5 pt source note.
-  - Colour-blind-safe palette; market/benchmark is always grey (`config.COLOR_MARKET`).
-  - Every chart states what is shown, data source, period and universe; all axes labelled.
-  - Save with `utils.save_fig(fig, "fig_1C_sharpe", source="Source: ... Jan 1995 - Jul 2023. ...")` and `utils.save_table(df, "tab_3A_weights")`.
-- **File names:** include the question number, e.g. `fig_1C_sharpe.png`, `tab_3A_weights.csv`.
-
----
-
-## Git workflow
-
-- **Only edit your own folder** (`partN/`). Never edit `data/raw/`. Tell the group before changing `src/utils.py`.
-- **Pull before you start, push when you finish a step.** Don't sit on changes for days.
-- Notebooks (`.ipynb`) are hard to merge — only edit your own.
+Python 3.12 is recommended. From the repository root:
 
 ```bash
-git clone https://github.com/WeekeyZhou/<repo-name>.git   # first time only
-git pull                                                  # before you start working
-git add part2/                                            # add your own folder
-git commit -m "Part2: 2A winsorize + coverage plot"       # describe what you did
-git push                                                  # upload
-git status                                                # when unsure, check first
-```
-
-### Setup
-
-```bash
+python -m venv .venv
+.venv\Scripts\activate          # Windows; on macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+Run each part, then rebuild the integrated report. Notebooks can be run in Jupyter ("Restart & Run All") or from the command line with `jupyter nbconvert --to notebook --execute --inplace <notebook>`.
+
+| Part | Run, in this order | Builds |
+|---|---|---|
+| 1 | `part1/python_source/question_1A.ipynb`, `1C`, `1D`, `1E` notebooks, then `python part1/python_source/build_part1_docs.py` | `part1/documents/Part1_*.docx` |
+| 2 | `python part2/python_source/question_2A.py`, `diagnostic_2A_pb_flag.py`, `question_2A5.py`, `question_2B.py`, `question_2C.py`, `question_2D.py`, then `build_consolidated.py` (details in `part2/README.md`) | `part2/documents/Part2_*.docx` |
+| 3 | `part3/python_source/question_3A_EN.ipynb` … `question_3E_EN.ipynb` (3A first: it saves the weights used by 3B–3E), then `python part3/python_source/build_part3_docs.py` | `part3/documents/Part3_*.docx` |
+| 4 | `part4/python_source/4A_risk_metrics.ipynb` … `4F_trader_vs_investor.ipynb` (independent of each other) | figures and tables in `output/` |
+| 5 | `python part5/python_source/run_part5.py` (runs 5B–5F and builds the documents; details in `part5/README.md`) | `part5/documents/Part5_*.docx` |
+| Report | `python report/build_report.py` | `report/FE5108_Group_Report.docx` |
+
+Notes:
+
+- **Rerunning a builder overwrites its Word output.** Keep manual edits to a document in a separate copy.
+- Part 1B and Part 5A are methodology reviews answered in the text; Part 5A's sources are in `part5/python_source/question_5A.md`.
+- Part 3 also contains Chinese-language versions of its notebooks (`question_3A.ipynb` …), used as team working notes. The `_EN` versions are identical apart from the language.
+- The PDF of the group report was exported with LibreOffice; exporting the `.docx` from Word gives the same layout.
+
+## Conventions used across parts
+
+All shared conventions are implemented in `src/config.py` and `src/utils.py`.
+
+- **Units:** returns are decimals in code (0.01 = 1%); Fama-French percent data are converted on loading, MSCI index levels are converted to month-end to month-end returns.
+- **Dates:** monthly `Period` index; each row is the return earned in that month. Analysis periods from the assignment are defined once in `config.PERIODS`.
+- **Annualization:** volatility = standard deviation of monthly returns × √12; the arithmetic or geometric annualized return is chosen per question and stated in the text; Sharpe ratio as defined in footnote 2 of the assignment.
+- **Exhibits:** figures saved at printed size with a source line (data source, period, universe), labelled axes, colour-blind-safe palette.
